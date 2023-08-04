@@ -1,53 +1,81 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { images } from "@/assets";
+import Colors from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import {
+  Dimensions,
+  ImageSourcePropType,
+  Image,
+  ColorValue,
+} from "react-native";
 
-import Colors from '@/constants/Colors';
+const { width } = Dimensions.get("window");
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+const TabBarIcon = ({
+  source,
+  color,
+}: {
+  source: ImageSourcePropType;
+  color: ColorValue;
+}) => {
+  return (
+    <Image
+      source={source}
+      style={{ tintColor: color, width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  );
+};
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+        tabBarActiveTintColor: Colors.blue,
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          justifyContent: "space-around",
+          borderTopEndRadius: 30,
+          borderTopStartRadius: 30,
+          width,
+          height: 60,
+          backgroundColor: Colors.white,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon source={images.home} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="messages"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon source={images.chat} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon source={images.cog} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="account"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon source={images.user} color={color} />
+          ),
         }}
       />
     </Tabs>
